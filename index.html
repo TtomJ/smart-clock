@@ -1,14 +1,12 @@
 <!DOCTYPE html>
-<!-- Coding by CodingLab || www.codinglabweb.com -->
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Analog Clock JavaScript</title>
-    <link rel="stylesheet" href="style.css" />
-    <script src="script.js" defer></script>
-    <style>/* Import Google font - Poppins */
+    <title>Analog Clock with Weather</title>
+    <style>
+      /* Import Google font - Poppins */
       @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap");
       * {
         margin: 0;
@@ -43,8 +41,8 @@
       }
       .container .clock {
         display: flex;
-        height: 600px;
-        width: 600px;
+        height: 40em;
+        width: 40em;
         border-radius: 50%;
         align-items: center;
         justify-content: center;
@@ -112,11 +110,12 @@
         box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
         cursor: pointer;
       }
-      #weather{
+      #weather {
         font-size: 2em;
+        font-weight: bold;
         color: var(--black-color);
       }
-      </style>
+    </style>
   </head>
   <body>
     <div class="container">
@@ -133,7 +132,6 @@
         <label style="--i: 10"><span>10</span></label>
         <label style="--i: 11"><span>11</span></label>
         <label style="--i: 12"><span>12</span></label>
-
         <div class="indicator">
           <span class="hand hour"></span>
           <span class="hand minute"></span>
@@ -141,78 +139,62 @@
         </div>
       </div>
       <div id="weather">Loading weather...</div>
-
       <div class="mode-switch">Dark Mode</div>
     </div>
     <script>
+      const body = document.querySelector("body"),
+        hourHand = document.querySelector(".hour"),
+        minuteHand = document.querySelector(".minute"),
+        secondHand = document.querySelector(".second"),
+        modeSwitch = document.querySelector(".mode-switch");
 
-      // Get references to DOM elements
-const body = document.querySelector("body"),
-  hourHand = document.querySelector(".hour"),
-  minuteHand = document.querySelector(".minute"),
-  secondHand = document.querySelector(".second"),
-  modeSwitch = document.querySelector(".mode-switch");
+      if (localStorage.getItem("mode") === "Dark Mode") {
+        body.classList.add("dark");
+        modeSwitch.textContent = "Light Mode";
+      }
 
-// check if the mode is already set to "Dark Mode" in localStorage
-if (localStorage.getItem("mode") === "Dark Mode") {
-  // add "dark" class to body and set modeSwitch text to "Light Mode"
-  body.classList.add("dark");
-  modeSwitch.textContent = "Light Mode";
-}
+      modeSwitch.addEventListener("click", () => {
+        body.classList.toggle("dark");
+        const isDarkMode = body.classList.contains("dark");
+        modeSwitch.textContent = isDarkMode ? "Light Mode" : "Dark Mode";
+        localStorage.setItem("mode", isDarkMode ? "Dark Mode" : "Light Mode");
+      });
 
-// add a click event listener to modeSwitch
-modeSwitch.addEventListener("click", () => {
-  // toggle the "dark" class on the body element
-  body.classList.toggle("dark");
-  // check if the "dark" class is currently present on the body element
-  const isDarkMode = body.classList.contains("dark");
-  // set modeSwitch text based on "dark" class presence
-  modeSwitch.textContent = isDarkMode ? "Light Mode" : "Dark Mode";
-  // set localStorage "mode" item based on "dark" class presence
-  localStorage.setItem("mode", isDarkMode ? "Dark Mode" : "Light Mode");
-});
+      const updateTime = () => {
+        let date = new Date(),
+          secToDeg = (date.getSeconds() / 60) * 360,
+          minToDeg = (date.getMinutes() / 60) * 360,
+          hrToDeg = (date.getHours() / 12) * 360;
 
-const updateTime = () => {
-  // Get current time and calculate degrees for clock hands
-  let date = new Date(),
-    secToDeg = (date.getSeconds() / 60) * 360,
-    minToDeg = (date.getMinutes() / 60) * 360,
-    hrToDeg = (date.getHours() / 12) * 360;
+        secondHand.style.transform = `rotate(${secToDeg}deg)`;
+        minuteHand.style.transform = `rotate(${minToDeg}deg)`;
+        hourHand.style.transform = `rotate(${hrToDeg}deg)`;
+      };
 
-  // Rotate the clock hands to the appropriate degree based on the current time
-  secondHand.style.transform = `rotate(${secToDeg}deg)`;
-  minuteHand.style.transform = `rotate(${minToDeg}deg)`;
-  hourHand.style.transform = `rotate(${hrToDeg}deg)`;
-};
+      setInterval(updateTime, 1000);
+      updateTime();
 
-// call updateTime to set clock hands every second
-setInterval(updateTime, 1000);
+      async function fetchWeather() {
+        const city = "Děčín";
+        const apiKey = "3f787f2291c2b74ed09156340115c804";
+        const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
 
-//call updateTime function on page load
-updateTime();
-
-// Function to fetch weather data
-async function fetchWeather() {
-            const city = "Děčín"; // City set to Děčín
-            const apiKey = "3f787f2291c2b74ed09156340115c804"; // Replace with your OpenWeatherMap API key
-            const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
-
-            try {
-                const response = await fetch(url);
-                if (!response.ok) {
-                    throw new Error("Weather data fetch failed!");
-                }
-                const data = await response.json();
-                const weatherElement = document.getElementById("weather");
-                const roundedTemp = Math.round(data.main.temp);
-                weatherElement.textContent = `${data.weather[0].description}, ${data.main.temp}°C`;
-            } catch (error) {
-                console.error("Error fetching weather:", error);
-                document.getElementById("weather").textContent = "Unable to fetch weather data.";
-            }
+        try {
+          const response = await fetch(url);
+          if (!response.ok) {
+            throw new Error("Weather data fetch failed!");
+          }
+          const data = await response.json();
+          const weatherElement = document.getElementById("weather");
+          const roundedTemp = Math.round(data.main.temp);
+          weatherElement.textContent = `${data.weather[0].description}, ${roundedTemp}°C`;
+        } catch (error) {
+          console.error("Error fetching weather:", error);
+          document.getElementById("weather").textContent = "Unable to fetch weather data.";
         }
+      }
 
-        fetchWeather(); // Call the function to fetch weather data when the page loads
+      fetchWeather();
     </script>
   </body>
 </html>
