@@ -204,6 +204,7 @@ async function fetchWeather() {
                 }
                 const data = await response.json();
                 const weatherElement = document.getElementById("weather");
+                const roundedTemp = Math.round(data.main.temp);
                 weatherElement.textContent = `${data.weather[0].description}, ${data.main.temp}°C`;
             } catch (error) {
                 console.error("Error fetching weather:", error);
