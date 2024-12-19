@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Smart Clock</title>
+  <style>
+    body { font-family: Arial, sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; }
+    #time { font-size: 5em; }
+    #weather { font-size: 2em; margin-top: 20px; }
+  </style>
+</head>
+<body>
+  <div id="time"></div>
+  <div id="weather"></div>
+  <script>
+    // Clock
+    function updateTime() {
+      const now = new Date();
+      document.getElementById('time').textContent = now.toLocaleTimeString();
+    }
+    setInterval(updateTime, 1000);
+    updateTime();
+
+    // Weather (Replace with your API Key and location)
+    async function fetchWeather() {
+      const response = await fetch('https://api.openweathermap.org/data/2.5/weather?q=YOUR_CITY&appid=YOUR_API_KEY&units=metric');
+      const data = await response.json();
+      document.getElementById('weather').textContent = `${data.weather[0].description}, ${data.main.temp}°C`;
+    }
+    fetchWeather();
+  </script>
+</body>
+</html>
