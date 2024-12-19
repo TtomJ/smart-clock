@@ -23,7 +23,7 @@
       body {
         display: flex;
         min-height: 100vh;
-        margin-top: 1em;
+        align-items: center;
         justify-content: center;
         background: var(--primary-color);
       }
@@ -41,8 +41,8 @@
       }
       .container .clock {
         display: flex;
-        height: 30em;
-        width: 30em;
+        height: 400px;
+        width: 400px;
         border-radius: 50%;
         align-items: center;
         justify-content: center;
@@ -111,9 +111,38 @@
         cursor: pointer;
       }
       #weather {
-        font-size: 2em;
+        font-size: 24px;
         font-weight: bold;
         color: var(--black-color);
+      }
+
+      /* Responsive Styles for Phones */
+      @media (max-width: 600px) {
+        .container .clock {
+          height: 250px;
+          width: 250px;
+        }
+        .clock label span {
+          font-size: 20px;
+        }
+        .indicator .hand {
+          height: 80px;
+          width: 3px;
+        }
+        .hand.minute {
+          height: 90px;
+          width: 3px;
+        }
+        .hand.hour {
+          height: 70px;
+          width: 4px;
+        }
+        #weather {
+          font-size: 18px;
+        }
+        .mode-switch {
+          font-size: 18px;
+        }
       }
     </style>
   </head>
