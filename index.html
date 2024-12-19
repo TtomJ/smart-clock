@@ -5,23 +5,106 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Smart Clock</title>
     <style>
-        body { font-family: Arial, sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; }
-        #time { font-size: 5em; }
-        #weather { font-size: 2em; margin-top: 20px; }
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        #clock {
+            position: relative;
+            width: 250px;
+            height: 250px;
+            border: 10px solid #333;
+            border-radius: 50%;
+            background-color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .hand {
+            position: absolute;
+            background-color: black;
+            transform-origin: 100%;
+            transition-timing-function: steps(60);
+        }
+
+        #hour {
+            width: 6px;
+            height: 60px;
+            background-color: #333;
+            top: 25px;
+            transform-origin: 100% 50%;
+        }
+
+        #minute {
+            width: 4px;
+            height: 80px;
+            background-color: #555;
+            top: 15px;
+            transform-origin: 100% 50%;
+        }
+
+        #second {
+            width: 2px;
+            height: 90px;
+            background-color: red;
+            top: 5px;
+            transform-origin: 100% 50%;
+        }
+
+        #center {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background-color: black;
+            border-radius: 50%;
+        }
+
+        /* Add a clock border to the center */
+        #weather {
+            font-size: 1.2em;
+            margin-top: 20px;
+        }
     </style>
 </head>
 <body>
-    <div id="time"></div>
+
+    <div id="clock">
+        <div id="hour" class="hand"></div>
+        <div id="minute" class="hand"></div>
+        <div id="second" class="hand"></div>
+        <div id="center"></div>
+    </div>
+
     <div id="weather">Loading weather...</div>
 
     <script>
-        // Function to update the time every second
-        function updateTime() {
+        // Function to update the clock
+        function updateClock() {
             const now = new Date();
-            document.getElementById('time').textContent = now.toLocaleTimeString();
+            const hour = now.getHours();
+            const minute = now.getMinutes();
+            const second = now.getSeconds();
+
+            // Calculate degrees for hands based on time
+            const hourDeg = (hour % 12) * 30 + (minute / 60) * 30;
+            const minuteDeg = minute * 6;
+            const secondDeg = second * 6;
+
+            // Apply rotation to each hand
+            document.getElementById('hour').style.transform = `rotate(${hourDeg}deg)`;
+            document.getElementById('minute').style.transform = `rotate(${minuteDeg}deg)`;
+            document.getElementById('second').style.transform = `rotate(${secondDeg}deg)`;
         }
-        setInterval(updateTime, 1000);
-        updateTime(); // Update the time immediately
+
+        setInterval(updateClock, 1000); // Update clock every second
+        updateClock(); // Initial update
 
         // Function to fetch weather data
         async function fetchWeather() {
