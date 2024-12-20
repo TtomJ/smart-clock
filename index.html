@@ -24,7 +24,6 @@
         display: flex;
         min-height: 100vh;
         margin: 1em;
-        justify-content: center;
         background: var(--primary-color);
       }
       body.dark {
@@ -41,8 +40,8 @@
       }
       .container .clock {
         display: flex;
-        height: 400px;
-        width: 400px;
+        height: 420px;
+        width: 420px;
         border-radius: 50%;
         align-items: center;
         justify-content: center;
@@ -118,32 +117,33 @@
 
       /* Responsive Styles for Phones */
       @media (max-width: 1000px) {
-        .container .clock {
-          height: 200px; /* Further reduced size */
-          width: 200px;
-        }
-        .clock label span {
-          font-size: 18px; /* Smaller font size for clock numbers */
-        }
-        .indicator .hand {
-          height: 65px; /* Adjusted hand size */
-          width: 2px;
-        }
-        .hand.minute {
-          height: 70px;
-          width: 2px;
-        }
-        .hand.hour {
-          height: 55px;
-          width: 3px;
-        }
-        #weather {
-          font-size: 16px; /* Smaller font for weather */
-        }
-        .mode-switch {
-          font-size: 16px; /* Adjusted font for mode switch */
-        }
-      }
+  .container .clock {
+    height: 230px; /* 15% increase from 200px */
+    width: 230px; /* 15% increase from 200px */
+  }
+  .clock label span {
+    font-size: 20.7px; /* 15% increase from 18px */
+  }
+  .indicator .hand {
+    height: 74.75px; /* 15% increase from 65px */
+    width: 2.3px; /* Adjusted width for proportional scaling */
+  }
+  .hand.minute {
+    height: 80.5px; /* 15% increase from 70px */
+    width: 2.3px; /* Adjusted width for proportional scaling */
+  }
+  .hand.hour {
+    height: 63.25px; /* 15% increase from 55px */
+    width: 3.45px; /* Adjusted width for proportional scaling */
+  }
+  #weather {
+    font-size: 18.4px; /* 15% increase from 16px */
+  }
+  .mode-switch {
+    font-size: 18.4px; /* 15% increase from 16px */
+  }
+}
+
     </style>
   </head>
   <body>
